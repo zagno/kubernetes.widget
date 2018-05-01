@@ -21,8 +21,7 @@ update: (output, domEl) ->
   dom = $(domEl)
 
   # # Parse the JSON created by the shell script.
-  data = JSON.parse output
-  
+  data = JSON.parse(output)
 
   html = ""
   # # Loop through the pods in the JSON.
@@ -48,18 +47,18 @@ update: (output, domEl) ->
 style: """
   margin:0
   padding:0px
-  left:500px
-  top: 5px
+  left:30px
+  top: 270px
   width:auto
   background:rgba(#000, .5)
   border:1px solid rgba(#000, .25)
   border-radius:5px
   
   .node
-    text-align:left
-    padding:20px
-    font-size:10pt
-    font-weight:bold
+    text-align: left
+    padding: 20px
+    font-size: 10pt
+    font-weight: bold
     font: 10px arial, sans-serif;
 
   .node .red
@@ -67,7 +66,9 @@ style: """
 
   .node td
     color: rgba(#A9A9A9)
+    padding: 1px 5px
   
   .node th
-    color: rgba(#A9A9A9)
+    color: rgba(#fff)
+    padding: 1px 5px
 """
