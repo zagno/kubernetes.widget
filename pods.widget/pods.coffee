@@ -10,8 +10,9 @@ render: (output) -> """
     <tr class='pod pod-header'>
       <th>Namespace</th>
       <th>Name</th>
-      <th>Pod IP</th>
+      <th>Ready</th>
       <th>Status</th>
+      <th>Restarts</th>
     </tr>
   </table>
 """
@@ -27,13 +28,21 @@ update: (output, domEl) ->
   # # Loop through the pods in the JSON.
   for item in data.items
     status_class_colour = if (item.status.phase is "Running") then '' else 'red'
-
+    total_status_count  = item.status.containerStatuses.length
+    ready_status_count  = item.status.containerStatuses.reduce (x, y) -> 
+      x + (y.ready ? 1 : 0)
+    , 0
+    restart_count       = item.status.containerStatuses.reduce (x, y) -> 
+      x + y.restartCount
+    , 0
+    
     html +="
       <tr class='pod pod-item'>
         <td>#{item.metadata.namespace}</td>
         <td>#{item.metadata.name}</td>
-        <td>#{item.status.podIP}</td>
+        <td>#{ready_status_count}/#{total_status_count}</td>
         <td class='#{status_class_colour}'>#{item.status.phase}</td>
+        <td>#{restart_count}</td>
       </tr>"
 
   # Set output.
@@ -46,7 +55,7 @@ update: (output, domEl) ->
 style: """
   margin:0
   padding:0px
-  left:5px
+  left:430px
   top: 5px
   width:auto
   background:rgba(#000, .5)
@@ -65,7 +74,9 @@ style: """
 
   .pod td
     color: rgba(#A9A9A9)
+    padding: 1px 5px
   
   .pod th
-    color: rgba(#A9A9A9)
+    color: rgba(#fff)
+    padding: 1px 5px
 """
